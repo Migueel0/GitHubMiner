@@ -10,7 +10,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Scanner;
 
-public class RESTUtils {
+public class RESTUtil {
 
     public static String tokenReader(String path){
         String token = "";
