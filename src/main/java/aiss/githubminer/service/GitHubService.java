@@ -27,9 +27,9 @@ public class GitHubService {
     final String gitMinerUri = "http://localhost:8080/gitminer";
 
     public Project getProjectByOwnerAndName(String owner,String repo){
-        String uri = baseUri + "/projects/" +  owner + "/" + repo;
+        String uri = baseUri + "/repos/" +  owner + "/" + repo;
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/gitlabminer/token.txt"));
+        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Project> request = new HttpEntity<>(null,headers);
         ResponseEntity<Project> response = restTemplate.exchange(uri,HttpMethod.GET,request,Project.class);
         return response.getBody();
@@ -110,13 +110,15 @@ public class GitHubService {
         return allData(owner,repo, sinceCommits, sinceIssues, maxPages);
     }
 
-    @GetMapping("/{owner}/{repo}")
+
+    @PostMapping("/{owner}/{repo}")
     public Project sendData(@PathVariable String owner,@PathVariable String repo, @RequestParam(defaultValue = "5") Integer sinceCommits,
                             @RequestParam(defaultValue = "20") Integer sinceIssues, @RequestParam(defaultValue = "2") Integer maxPages){
         Project newProject = restTemplate.postForObject(gitMinerUri + "/" + owner + "/" + repo,
                 allData(owner,repo, sinceCommits, sinceIssues, maxPages),Project.class);
         return newProject;
     }
+
 
 
 }

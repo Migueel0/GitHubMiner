@@ -20,12 +20,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class GitLabServiceTest {
+class GitHubServiceTest {
     @Autowired
     GitHubService gitHubService;
     @Autowired
     RestTemplate restTemplate;
-    final String baseUri = "https://gitlab.com/api/v4/";
+    final String baseUri = "https://api.github.com/";
 
     @Test
     @DisplayName("Testing get project by id")
@@ -39,7 +39,7 @@ class GitLabServiceTest {
 
         //Consuming API in order to get the status code
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/gitlabminer/token.txt"));
+        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Project> request = new HttpEntity<>(null,headers);
         ResponseEntity<Project> response = restTemplate.exchange(uri, HttpMethod.GET,request,Project.class);
         HttpStatus status = response.getStatusCode();
@@ -59,6 +59,7 @@ class GitLabServiceTest {
         assertTrue(project.getIssues().isEmpty());
 
         System.out.println("Test passed");
+        System.out.println(project);
 
     }
 
@@ -75,7 +76,7 @@ class GitLabServiceTest {
 
         //Consuming API in order to get the status code
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/gitlabminer/token.txt"));
+        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Project> request = new HttpEntity<>(null,headers);
         ResponseEntity<Commit[]> response = restTemplate.exchange(uri, HttpMethod.GET,request, Commit[].class);
         HttpStatus status = response.getStatusCode();
@@ -115,7 +116,7 @@ class GitLabServiceTest {
 
         //Consuming API in order to get the status code
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/gitlabminer/token.txt"));
+        headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Project> request = new HttpEntity<>(null,headers);
         ResponseEntity<Commit[]> response = restTemplate.exchange(uri, HttpMethod.GET,request, Commit[].class);
         HttpStatus status = response.getStatusCode();
@@ -173,7 +174,7 @@ class GitLabServiceTest {
         //Checking response with correct token authorization
         String uri = baseUri + "/projects/" +  id + "/issues/" + iid + "/notes";
         HttpHeaders headersCorrectToken  = new HttpHeaders();
-        headersCorrectToken.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/gitlabminer/token.txt"));
+        headersCorrectToken.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<String[]> requestValidToken = new HttpEntity<>(null,headersCorrectToken);
         ResponseEntity<Comment[]> responseValidToken = restTemplate.exchange(uri,HttpMethod.GET,requestValidToken,Comment[].class);
         HttpStatus okStatus = responseValidToken.getStatusCode();

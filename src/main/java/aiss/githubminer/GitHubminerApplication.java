@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-public class GithubminerApplication {
+public class GitHubminerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GithubminerApplication.class, args);
+		SpringApplication.run(GitHubminerApplication.class, args);
 	}
 
 	@Bean
