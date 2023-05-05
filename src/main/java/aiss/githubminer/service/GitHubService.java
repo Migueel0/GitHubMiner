@@ -4,6 +4,8 @@ import aiss.githubminer.model.Comment;
 import aiss.githubminer.model.Commit;
 import aiss.githubminer.model.Issue;
 import aiss.githubminer.model.Project;
+import aiss.githubminer.model.CommitData.Author;
+import aiss.githubminer.model.CommitData.Committer;
 import aiss.githubminer.utils.RESTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.config.ProjectingArgumentResolverRegistrar;
@@ -50,21 +52,53 @@ public class GitHubService {
         ResponseEntity<Commit[]> response =  restTemplate.exchange(uri, HttpMethod.GET, request, Commit[].class);
         //FIRST PAGE
         List<Commit> commits = new ArrayList<>();
-        commits.addAll(Arrays.stream(response.getBody()).filter(x -> RESTUtil
-                .StringToLocalDateTime(x.getCommittedDate())
-                .isAfter(LocalDateTime.now().minusDays(days))).toList());
+        commits.addAll(Arrays.stream(response.getBody()).toList());
+        mapCommitValues(commits);
+        commits.stream().filter(x -> RESTUtil
+                    .StringToLocalDateTime(x.getCommittedDate())
+                    .isAfter(LocalDateTime.now().minusDays(days))).toList();
         int page = 1;
         //ADDING REMAINING PAGES
         while (page <= pages && RESTUtil.getNextPageUrl(response.getHeaders())!= null){
             String url =  RESTUtil.getNextPageUrl(response.getHeaders());
             response =  restTemplate.exchange(url,HttpMethod.GET,request,Commit[].class);
-            List<Commit> commitPage = Arrays.stream(response.getBody()).filter(x -> RESTUtil
+            List<Commit> commitPage = Arrays.stream(response.getBody()).toList();
+            mapCommitValues(commits);
+            commits.stream().filter(x -> RESTUtil
                     .StringToLocalDateTime(x.getCommittedDate())
                     .isAfter(LocalDateTime.now().minusDays(days))).toList();
             commits.addAll(commitPage);
             page++;
         }
         return commits;
+    }
+
+    public void mapCommitValues(List<Commit> commits){
+        for(Commit commit: commits){
+
+            Author author = commit.getCommit().getAuthor();
+            Committer committer = commit.getCommit().getCommitter();
+
+            String title = commit.getCommit().getMessage();
+            String authorName = author.getName();
+            String authorEmail = author.getEmail();
+            String authoredDate = author.getDate();
+            String committerName = committer.getName();
+            String committerEmail = committer.getEmail();
+            String committedDate = committer.getDate();
+            String webUrl = commit.getCommit().getUrl();
+
+            commit.setTitle(title);
+            commit.setMessage(title);
+            commit.setAuthorName(authorName);
+            commit.setAuthorEmail(authorEmail);
+            commit.setAuthoredDate(authoredDate);
+            commit.setCommitterName(committerName);
+            commit.setCommitterEmail(committerEmail);
+            commit.setCommittedDate(committedDate);
+            commit.setWebUrl(webUrl);
+        }
+
     }
 
     public List<Comment> getNotes(String owner, String repo){
@@ -77,7 +111,7 @@ public class GitHubService {
     }
 
     public List<Issue> sinceIssues(String owner, String repo, Integer days, Integer pages){
-        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues";
+        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues/?state=all";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Issue[]> request = new HttpEntity<>(null, headers);

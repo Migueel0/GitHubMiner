@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.ALWAYS)
 @JsonPropertyOrder({
         "id",
-        "iid",
+        "ref_id",
         "title",
         "description",
         "state",
@@ -34,7 +34,7 @@ public class Issue {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("iid")
+    @JsonProperty("number")
     private String refId;
     @JsonProperty("title")
     private String title;

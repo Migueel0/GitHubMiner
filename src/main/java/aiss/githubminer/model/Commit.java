@@ -2,14 +2,11 @@ package aiss.githubminer.model;
 
 import javax.annotation.Generated;
 
+import aiss.githubminer.model.CommitData.CommitProperty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
-import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -29,7 +26,10 @@ import java.util.Date;
 @Generated("jsonschema2pojo")
 
 public class Commit {
-    @JsonProperty("id")
+
+    @JsonProperty("commit")
+    public CommitProperty commit;
+    @JsonProperty("sha")
     private String id;
     @JsonProperty("title")
     private String title;
@@ -49,7 +49,6 @@ public class Commit {
     private String committedDate;
     @JsonProperty("web_url")
     private String webUrl;
-
     @JsonProperty("id")
     public String getId() {
         return id;
@@ -150,6 +149,15 @@ public class Commit {
         this.webUrl = webUrl;
     }
 
+    @JsonProperty("commit")
+    public CommitProperty getCommit() {
+        return commit;
+    }
+
+    @JsonProperty("commit")
+    public void setAuthor(CommitProperty commit) {
+        this.commit = commit;
+    }
 
     @Override
     public String toString() {
@@ -160,11 +168,11 @@ public class Commit {
         sb.append(",\n");
         sb.append("title");
         sb.append('=');
-        //sb.append(((this.title == null)?"<null>":this.title));
+        sb.append(((this.title == null)?"<null>":this.title));
         sb.append(",\n");
         sb.append("message");
         sb.append('=');
-        //sb.append(((this.message == null)?"<null>":this.message));
+        sb.append(((this.message == null)?"<null>":this.message));
         sb.append(",\n");
         sb.append("authorName");
         sb.append('=');

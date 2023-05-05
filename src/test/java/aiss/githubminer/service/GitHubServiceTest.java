@@ -212,4 +212,17 @@ class GitHubServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Display commit data")
+    void commitData(){
+        String owner = "Mastercard";
+        String repo = "client-encryption-java";
+        Integer days = 1;
+        Integer pages = 30;
+        List<Commit> commits = gitHubService.sinceCommits(owner,repo,days,pages);
+        System.out.println(commits);
+
+
+    }
+
 }
