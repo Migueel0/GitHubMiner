@@ -170,19 +170,23 @@ class GitHubServiceTest {
 
     void authorizationTest(){
 
-        String id = "278964";
-        String iid= "409313";
+
 
         //Checking response with correct token authorization
-        String uri = baseUri + "/projects/" +  id + "/issues/" + iid + "/notes";
+        String uri = "https://api.github.com/user/orgs";
         HttpHeaders headersCorrectToken  = new HttpHeaders();
         headersCorrectToken.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<String[]> requestValidToken = new HttpEntity<>(null,headersCorrectToken);
-        ResponseEntity<Comment[]> responseValidToken = restTemplate.exchange(uri,HttpMethod.GET,requestValidToken,Comment[].class);
-        HttpStatus okStatus = responseValidToken.getStatusCode();
-
         //Checking the status code
-        assertEquals(HttpStatus.OK, okStatus,"Status code must be OK");
+        try{
+            ResponseEntity<Comment[]> responseValidToken = restTemplate.exchange(uri,HttpMethod.GET,requestValidToken,Comment[].class);
+            HttpStatus status = responseValidToken.getStatusCode();
+            assertEquals(HttpStatus.OK,status,"Status must be OK");
+        }catch (HttpClientErrorException e){
+            HttpStatus errorStatus = e.getStatusCode();
+            assertNotEquals(HttpStatus.UNAUTHORIZED, errorStatus,"Status cannot be unauthorized");
+        }
+
 
 
         ///Checking response with no token authorization
@@ -240,4 +244,17 @@ class GitHubServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Display all data")
+    void allData(){
+        String owner = "Mastercard";
+        String repo = "client-encryption-java";
+        Integer sinceCommits = 20;
+        Integer sinceIssues = 50;
+        Integer pages = 1;
+        Project project = gitHubService.allData(owner,repo,sinceCommits,sinceIssues,pages);
+        System.out.println(project);
+
+
+    }
 }

@@ -3,12 +3,12 @@ package aiss.githubminer.service;
 import aiss.githubminer.model.Comment;
 import aiss.githubminer.model.Commit;
 import aiss.githubminer.model.Issue;
+import aiss.githubminer.model.IssueData.Label;
 import aiss.githubminer.model.Project;
 import aiss.githubminer.model.CommitData.Author;
 import aiss.githubminer.model.CommitData.Committer;
 import aiss.githubminer.utils.RESTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.config.ProjectingArgumentResolverRegistrar;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -112,6 +112,23 @@ public class GitHubService {
         return Arrays.stream(response.getBody()).toList();
     }
 
+    public void mapIssuesValues(List<Issue> issues){
+        for(Issue issue : issues){
+            List<Label> labelsData = issue.getLabelsData();
+            List<String> labels = new ArrayList<>();
+            for(Label label : labelsData){
+                labels.add(label.getName());
+            }
+            Integer upvotes= issue.getReactions().getPlus1();
+            Integer downvotes = issue.getReactions().getMinous1();
+
+            issue.setLabels(labels);
+            issue.setUpvotes(upvotes);
+            issue.setDownvotes(downvotes);
+        }
+
+    }
+
     public List<Issue> sinceIssues(String owner, String repo, Integer days, Integer pages){
         String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues?state=all";
         HttpHeaders headers = new HttpHeaders();
@@ -136,6 +153,7 @@ public class GitHubService {
             issues.addAll(issuePage);
             page++;
         }
+        mapIssuesValues(issues);
         issues.forEach(x -> x.setComments(getNotes(owner,repo,x.getRefId())));
         return issues;
     }

@@ -7,10 +7,9 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import aiss.githubminer.model.IssueData.Label;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import aiss.githubminer.model.IssueData.Reactions;
+import com.fasterxml.jackson.annotation.*;
+
 @JsonInclude(JsonInclude.Include.ALWAYS)
 @JsonPropertyOrder({
         "id",
@@ -63,8 +62,12 @@ public class Issue {
     private String webUrl;
     @JsonProperty("comment")
     private List<Comment> comments;
-    @JsonProperty("labels")
+
+    @JsonIgnore
     private List<Label> labelsData;
+
+    @JsonIgnore
+    private Reactions reactions;
 
     @JsonProperty("id")
     public String getId() {
@@ -212,15 +215,19 @@ public class Issue {
     public List<Label> getLabelsData() {
         return labelsData;
     }
-    @JsonProperty("labels")
+
     public void setLabelsData(List<Label> labelsData) {
         this.labelsData = labelsData;
     }
+    @JsonProperty("reactions")
+    @JsonIgnore
+    public Reactions getReactions() {
+        return reactions;
+    }
 
-
-
-
-
+    public void setReactions(Reactions reactions) {
+        this.reactions = reactions;
+    }
 
     @Override
     public String toString() {

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "url",
     "total_count",
     "+1",
-    "bruh",
+    "-1",
     "laugh",
     "hooray",
     "confused",
@@ -27,9 +27,9 @@ public class Reactions {
     @JsonProperty("total_count")
     private Integer totalCount;
     @JsonProperty("+1")
-    private Integer _1;
-    @JsonProperty("bruh")
-    private Integer bruh;
+    private Integer plus1;
+    @JsonProperty("-1")
+    private Integer minous1;
     @JsonProperty("laugh")
     private Integer laugh;
     @JsonProperty("hooray")
@@ -64,23 +64,23 @@ public class Reactions {
     }
 
     @JsonProperty("+1")
-    public Integer get1() {
-        return _1;
+    public Integer getPlus1() {
+        return plus1;
     }
 
     @JsonProperty("+1")
-    public void set1(Integer _1) {
-        this._1 = _1;
+    public void setPlus1(Integer plus1) {
+        this.plus1 = plus1;
+    }
+
+    @JsonProperty("-1")
+    public Integer getMinous1() {
+        return minous1;
     }
 
     @JsonProperty("bruh")
-    public Integer getBruh() {
-        return bruh;
-    }
-
-    @JsonProperty("bruh")
-    public void setBruh(Integer bruh) {
-        this.bruh = bruh;
+    public void setBruh(Integer minous1) {
+        this.minous1 = minous1;
     }
 
     @JsonProperty("laugh")

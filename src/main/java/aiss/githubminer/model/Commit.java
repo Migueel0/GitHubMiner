@@ -3,9 +3,7 @@ package aiss.githubminer.model;
 import javax.annotation.Generated;
 
 import aiss.githubminer.model.CommitData.CommitProperty;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,8 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("jsonschema2pojo")
 
 public class Commit {
-
-    @JsonProperty("commit")
+    @JsonIgnore
     public CommitProperty commit;
     @JsonProperty("sha")
     private String id;
@@ -49,12 +46,12 @@ public class Commit {
     private String committedDate;
     @JsonProperty("web_url")
     private String webUrl;
-    @JsonProperty("id")
+    @JsonGetter("sha")
     public String getId() {
         return id;
     }
 
-    @JsonProperty("id")
+    @JsonProperty("sha")
     public void setId(String id) {
         this.id = id;
     }
@@ -150,12 +147,12 @@ public class Commit {
     }
 
     @JsonProperty("commit")
+    @JsonIgnore
     public CommitProperty getCommit() {
         return commit;
     }
 
-    @JsonProperty("commit")
-    public void setAuthor(CommitProperty commit) {
+    public void setCommit(CommitProperty commit) {
         this.commit = commit;
     }
 
