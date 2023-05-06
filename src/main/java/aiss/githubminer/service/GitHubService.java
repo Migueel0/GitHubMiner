@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RestController
@@ -52,21 +53,22 @@ public class GitHubService {
         ResponseEntity<Commit[]> response =  restTemplate.exchange(uri, HttpMethod.GET, request, Commit[].class);
         //FIRST PAGE
         List<Commit> commits = new ArrayList<>();
+
         commits.addAll(Arrays.stream(response.getBody()).toList());
         mapCommitValues(commits);
-        commits.stream().filter(x -> RESTUtil
-                    .StringToLocalDateTime(x.getCommittedDate())
-                    .isAfter(LocalDateTime.now().minusDays(days))).toList();
+        commits = commits.stream()
+                .filter(x -> RESTUtil.StringToLocalDateTime(x.getCommittedDate())
+                        .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
         int page = 1;
         //ADDING REMAINING PAGES
         while (page <= pages && RESTUtil.getNextPageUrl(response.getHeaders())!= null){
             String url =  RESTUtil.getNextPageUrl(response.getHeaders());
             response =  restTemplate.exchange(url,HttpMethod.GET,request,Commit[].class);
             List<Commit> commitPage = Arrays.stream(response.getBody()).toList();
-            mapCommitValues(commits);
-            commits.stream().filter(x -> RESTUtil
-                    .StringToLocalDateTime(x.getCommittedDate())
-                    .isAfter(LocalDateTime.now().minusDays(days))).toList();
+            mapCommitValues(commitPage);
+            commitPage = commitPage.stream()
+                    .filter(x -> RESTUtil.StringToLocalDateTime(x.getCommittedDate())
+                            .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
             commits.addAll(commitPage);
             page++;
         }
@@ -101,8 +103,8 @@ public class GitHubService {
 
     }
 
-    public List<Comment> getNotes(String owner, String repo){
-        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues/comments";
+    public List<Comment> getNotes(String owner, String repo, String iid){
+        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues/" + iid + "/comments";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<String[]> request = new HttpEntity<>(null,headers);
@@ -111,7 +113,7 @@ public class GitHubService {
     }
 
     public List<Issue> sinceIssues(String owner, String repo, Integer days, Integer pages){
-        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues/?state=all";
+        String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues?state=all";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Issue[]> request = new HttpEntity<>(null, headers);
@@ -122,7 +124,7 @@ public class GitHubService {
         int page = 1;
         issues.addAll(Arrays.stream(response.getBody()).filter(x -> RESTUtil
                 .StringToLocalDateTime(x.getUpdatedAt())
-                .isAfter(LocalDateTime.now().minusDays(days))).toList());
+                .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList()));
 
         //ADDING REMAINING PAGES
         while (page <= pages && RESTUtil.getNextPageUrl(response.getHeaders())!= null){
@@ -130,11 +132,11 @@ public class GitHubService {
             response =  restTemplate.exchange(url,HttpMethod.GET,request,Issue[].class);
             List<Issue> issuePage = Arrays.stream(response.getBody()).filter(x -> RESTUtil
                     .StringToLocalDateTime(x.getUpdatedAt())
-                    .isAfter(LocalDateTime.now().minusDays(days))).toList();
+                    .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
             issues.addAll(issuePage);
             page++;
         }
-        issues.forEach(x -> x.setComments(getNotes(owner,repo)));
+        issues.forEach(x -> x.setComments(getNotes(owner,repo,x.getRefId())));
         return issues;
     }
 

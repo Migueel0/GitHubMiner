@@ -72,11 +72,11 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    @JsonProperty("author")
+    @JsonProperty("user")
     public User getAuthor() {
         return author;
     }
-    @JsonProperty("author")
+    @JsonProperty("user")
     public void setAuthor(User author) {
         this.author = author;
     }

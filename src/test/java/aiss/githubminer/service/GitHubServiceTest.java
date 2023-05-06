@@ -68,7 +68,7 @@ class GitHubServiceTest {
     void sinceCommitsTest(){
         String owner = "Mastercard";
         String repo = "client-encryption-java";
-        Integer days = 1;
+        Integer days = 7;
         Integer pages = 30;
         List<Commit> commits =  gitHubService.sinceCommits(owner,repo,days,pages);
 
@@ -100,6 +100,8 @@ class GitHubServiceTest {
         }
 
         System.out.println("Test passed");
+        System.out.println(commits);
+
 
     }
 
@@ -217,10 +219,23 @@ class GitHubServiceTest {
     void commitData(){
         String owner = "Mastercard";
         String repo = "client-encryption-java";
-        Integer days = 1;
+        Integer days = 7;
         Integer pages = 30;
         List<Commit> commits = gitHubService.sinceCommits(owner,repo,days,pages);
         System.out.println(commits);
+
+
+    }
+
+    @Test
+    @DisplayName("Display issues data")
+    void issueData(){
+        String owner = "Mastercard";
+        String repo = "client-encryption-java";
+        Integer days = 20;
+        Integer pages = 1;
+        List<Issue> issues = gitHubService.sinceIssues(owner,repo,days,pages);
+        System.out.println(issues);
 
 
     }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.Generated;
 
+import aiss.githubminer.model.IssueData.Label;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,13 +21,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "created_at",
         "updated_at",
         "closed_at",
-        "labels",
+        "label",
         "author",
         "assignee",
         "upvotes",
         "downvotes",
         "web_url",
-        "comments"
+        "comment"
 
 })
 @Generated("jsonschema2pojo")
@@ -38,7 +39,7 @@ public class Issue {
     private String refId;
     @JsonProperty("title")
     private String title;
-    @JsonProperty("description")
+    @JsonProperty("body")
     private String description;
     @JsonProperty("state")
     private String state;
@@ -48,9 +49,9 @@ public class Issue {
     private String updatedAt;
     @JsonProperty("closed_at")
     private String closedAt;
-    @JsonProperty("labels")
+    @JsonProperty("label")
     private List<String> labels;
-    @JsonProperty("author")
+    @JsonProperty("user")
     private User author;
     @JsonProperty("assignee")
     private User assignee;
@@ -58,10 +59,12 @@ public class Issue {
     private Integer upvotes;
     @JsonProperty("downvotes")
     private Integer downvotes;
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     private String webUrl;
-    @JsonProperty("comments")
+    @JsonProperty("comment")
     private List<Comment> comments;
+    @JsonProperty("labels")
+    private List<Label> labelsData;
 
     @JsonProperty("id")
     public String getId() {
@@ -143,12 +146,12 @@ public class Issue {
         this.closedAt = closedAt;
     }
 
-    @JsonProperty("labels")
+    @JsonProperty("label")
     public List<String> getLabels() {
         return labels;
     }
 
-    @JsonProperty("labels")
+    @JsonProperty("label")
     public void setLabels(List<String> labels) {
         this.labels = labels;
     }
@@ -176,7 +179,7 @@ public class Issue {
     public User getAuthor() {
         return author;
     }
-    @JsonProperty("author")
+    @JsonProperty("user")
     public void setAuthor(User author) {
         this.author = author;
     }
@@ -189,21 +192,29 @@ public class Issue {
         this.assignee = assignee;
     }
 
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     public String getWebUrl() {
         return webUrl;
     }
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }
-    @JsonProperty("comments")
+    @JsonProperty("comment")
     public List<Comment> getComments() {
         return comments;
     }
-    @JsonProperty("comments")
+    @JsonProperty("comment")
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    @JsonProperty("labels")
+    public List<Label> getLabelsData() {
+        return labelsData;
+    }
+    @JsonProperty("labels")
+    public void setLabelsData(List<Label> labelsData) {
+        this.labelsData = labelsData;
     }
 
 

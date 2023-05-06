@@ -23,13 +23,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class User {
     @JsonProperty("id")
     private String id;
-    @JsonProperty("username")
+    @JsonProperty("login")
     private String username;
-    @JsonProperty("name")
+    @JsonProperty("login")
     private String name;
     @JsonProperty("avatar_url")
     private String avatarUrl;
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     private String webUrl;
 
     @JsonProperty("id")
@@ -42,12 +42,12 @@ public class User {
         this.id = id;
     }
 
-    @JsonProperty("username")
+    @JsonProperty("login")
     public String getUsername() {
         return username;
     }
 
-    @JsonProperty("username")
+    @JsonProperty("login")
     public void setUsername(String username) {
         this.username = username;
     }
@@ -72,12 +72,12 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     public String getWebUrl() {
         return webUrl;
     }
 
-    @JsonProperty("web_url")
+    @JsonProperty("html_url")
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }
