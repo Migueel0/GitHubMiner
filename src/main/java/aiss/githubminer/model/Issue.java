@@ -1,9 +1,11 @@
 package aiss.githubminer.model;
 
+import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Generated;
 
 import aiss.githubminer.model.IssueData.Label;
@@ -20,7 +22,7 @@ import com.fasterxml.jackson.annotation.*;
         "created_at",
         "updated_at",
         "closed_at",
-        "label",
+        "labels",
         "author",
         "assignee",
         "upvotes",
@@ -34,7 +36,9 @@ public class Issue {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("number")
+    @JsonIgnore
+    private String number;
+    @JsonProperty("ref_id")
     private String refId;
     @JsonProperty("title")
     private String title;
@@ -48,8 +52,7 @@ public class Issue {
     private String updatedAt;
     @JsonProperty("closed_at")
     private String closedAt;
-    @JsonProperty("label")
-    private List<String> labels;
+
     @JsonProperty("user")
     private User author;
     @JsonProperty("assignee")
@@ -63,9 +66,8 @@ public class Issue {
     @JsonProperty("comment")
     private List<Comment> comments;
 
-    @JsonIgnore
-    private List<Label> labelsData;
-
+    @JsonProperty("labels")
+    private List<Label> labels;
     @JsonIgnore
     private Reactions reactions;
 
@@ -79,14 +81,24 @@ public class Issue {
         this.id = id;
     }
 
-    @JsonProperty("iid")
+    @JsonProperty("ref_id")
     public String getRefId() {
         return refId;
     }
 
-    @JsonProperty("iid")
+    @JsonProperty("ref_id")
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    @JsonProperty("number")
+    @JsonIgnore
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     @JsonProperty("title")
@@ -143,20 +155,9 @@ public class Issue {
     public String getClosedAt() {
         return closedAt;
     }
-
     @JsonProperty("closed_at")
     public void setClosedAt(String closedAt) {
         this.closedAt = closedAt;
-    }
-
-    @JsonProperty("label")
-    public List<String> getLabels() {
-        return labels;
-    }
-
-    @JsonProperty("label")
-    public void setLabels(List<String> labels) {
-        this.labels = labels;
     }
 
     @JsonProperty("upvotes")
@@ -211,20 +212,18 @@ public class Issue {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
     @JsonProperty("labels")
-    public List<Label> getLabelsData() {
-        return labelsData;
+    public List<String> getLabels() {
+        return labels.stream().map(Label::getName).collect(Collectors.toList());
     }
 
-    public void setLabelsData(List<Label> labelsData) {
-        this.labelsData = labelsData;
-    }
+
     @JsonProperty("reactions")
     @JsonIgnore
     public Reactions getReactions() {
         return reactions;
     }
-
     public void setReactions(Reactions reactions) {
         this.reactions = reactions;
     }

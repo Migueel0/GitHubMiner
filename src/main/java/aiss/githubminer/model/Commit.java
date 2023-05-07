@@ -26,8 +26,11 @@ import com.fasterxml.jackson.annotation.*;
 public class Commit {
     @JsonIgnore
     public CommitProperty commit;
-    @JsonProperty("sha")
+    @JsonProperty("id")
     private String id;
+
+    @JsonIgnore
+    private String sha;
     @JsonProperty("title")
     private String title;
     @JsonProperty("message")
@@ -46,14 +49,23 @@ public class Commit {
     private String committedDate;
     @JsonProperty("web_url")
     private String webUrl;
-    @JsonGetter("sha")
+    @JsonGetter("id")
     public String getId() {
         return id;
     }
 
-    @JsonProperty("sha")
+    @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
+    }
+    @JsonProperty("sha")
+    @JsonIgnore
+    public String getSha() {
+        return sha;
+    }
+    @JsonProperty("sha")
+    public void setSha(String sha) {
+        this.sha = sha;
     }
 
     @JsonProperty("title")

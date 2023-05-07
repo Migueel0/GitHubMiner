@@ -81,6 +81,7 @@ public class GitHubService {
             Author author = commit.getCommit().getAuthor();
             Committer committer = commit.getCommit().getCommitter();
 
+            String id = commit.getSha();
             String title = commit.getCommit().getMessage();
             String authorName = author.getName();
             String authorEmail = author.getEmail();
@@ -90,6 +91,7 @@ public class GitHubService {
             String committedDate = committer.getDate();
             String webUrl = commit.getCommit().getUrl();
 
+            commit.setId(id);
             commit.setTitle(title);
             commit.setMessage(title);
             commit.setAuthorName(authorName);
@@ -114,15 +116,15 @@ public class GitHubService {
 
     public void mapIssuesValues(List<Issue> issues){
         for(Issue issue : issues){
-            List<Label> labelsData = issue.getLabelsData();
-            List<String> labels = new ArrayList<>();
-            for(Label label : labelsData){
-                labels.add(label.getName());
-            }
+            //List<String> labels = issue.getLabelsData();
+
+            String refId = issue.getNumber();
             Integer upvotes= issue.getReactions().getPlus1();
             Integer downvotes = issue.getReactions().getMinous1();
 
-            issue.setLabels(labels);
+
+            issue.setRefId(refId);
+            //issue.setLabels(labels);
             issue.setUpvotes(upvotes);
             issue.setDownvotes(downvotes);
         }
