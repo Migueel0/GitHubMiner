@@ -21,13 +21,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RestController
-@RequestMapping("githubminer")
+
 public class GitHubService {
     @Autowired
     RestTemplate restTemplate;
     final String baseUri = "https://api.github.com/";
-    final String gitMinerUri = "http://localhost:8080/gitminer";
 
     public Project getProjectByOwnerAndName(String owner,String repo){
         String uri = baseUri + "/repos/" +  owner + "/" + repo;
@@ -160,20 +158,6 @@ public class GitHubService {
         return issues;
     }
 
-    @GetMapping("/{owner}/{repo}")
-    public Project getData(@PathVariable String owner,@PathVariable String repo, @RequestParam(defaultValue = "5") Integer sinceCommits,
-                           @RequestParam(defaultValue = "20") Integer sinceIssues, @RequestParam(defaultValue = "2") Integer maxPages){
-        return allData(owner,repo, sinceCommits, sinceIssues, maxPages);
-    }
-
-
-    @PostMapping("/{owner}/{repo}")
-    public Project sendData(@PathVariable String owner,@PathVariable String repo, @RequestParam(defaultValue = "5") Integer sinceCommits,
-                            @RequestParam(defaultValue = "20") Integer sinceIssues, @RequestParam(defaultValue = "2") Integer maxPages){
-        Project newProject = restTemplate.postForObject(gitMinerUri + "/" + owner + "/" + repo,
-                allData(owner,repo, sinceCommits, sinceIssues, maxPages),Project.class);
-        return newProject;
-    }
 
 
 

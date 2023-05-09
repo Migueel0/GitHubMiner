@@ -225,7 +225,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer days = 7;
         Integer pages = 30;
-        List<Commit> commits = gitHubService.sinceCommits(owner,repo,days,pages);
+        List<Commit> commits =  gitHubService.sinceCommits(owner,repo,days,pages);
         System.out.println(commits);
 
 
