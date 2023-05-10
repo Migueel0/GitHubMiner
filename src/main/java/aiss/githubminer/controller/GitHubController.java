@@ -18,7 +18,7 @@ public class GitHubController {
     @Autowired
     GitHubService service;
 
-    final String gitMinerUri = "http://localhost:8080/gitminer";
+    final String gitMinerUri = "http://localhost:8080/gitminer/v1/projects";
 
     @GetMapping("/{owner}/{repo}")
     public Project getData(@PathVariable String owner, @PathVariable String repo, @RequestParam(defaultValue = "5") Integer sinceCommits,

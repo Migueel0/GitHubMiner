@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class Project {
     @Id
-    @JsonProperty("node_id")
+    @JsonProperty("id")
     public String id;
     @JsonProperty("name")
     @NotEmpty(message = "The name of the project cannot be empty")
