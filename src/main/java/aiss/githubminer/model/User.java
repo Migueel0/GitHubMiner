@@ -2,6 +2,8 @@ package aiss.githubminer.model;
 
 
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,6 +27,9 @@ public class User {
     @JsonProperty("avatar_url")
     private String avatarUrl;
     @JsonProperty("html_url")
+    @JsonIgnore
+    private String htmlUrl;
+    @JsonProperty("web_url")
     private String webUrl;
 
     @JsonProperty("id")
@@ -68,11 +73,21 @@ public class User {
     }
 
     @JsonProperty("html_url")
-    public String getWebUrl() {
-        return webUrl;
+    @JsonIgnore
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
     @JsonProperty("html_url")
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+    }
+
+    @JsonProperty("web_url")
+    public String getWebUrl() {
+        return webUrl;
+    }
+    @JsonProperty("web_url")
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }

@@ -7,8 +7,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
+@Service
 public class ProjectService {
     @Autowired
     RestTemplate restTemplate;
@@ -28,8 +31,10 @@ public class ProjectService {
     }
     public Project allData(String owner, String repo, Integer sinceCommits, Integer sinceIssues,Integer maxPages){
         Project data = getProjectByOwnerAndName(owner,repo);
+        String webUrl = data.getHtmlUrl();
         data.setCommits(commitService.sinceCommits(owner,repo,sinceCommits,maxPages));
         data.setIssues(issueService.sinceIssues(owner,repo,sinceIssues,maxPages));
+        data.setWebUrl(webUrl);
         return data;
     }
 

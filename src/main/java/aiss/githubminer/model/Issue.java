@@ -49,7 +49,11 @@ public class Issue {
     private String updatedAt;
     @JsonProperty("closed_at")
     private String closedAt;
+
     @JsonProperty("user")
+    @JsonIgnore
+    private User user;
+    @JsonProperty("author")
     private User author;
     @JsonProperty("assignee")
     private User assignee;
@@ -58,6 +62,9 @@ public class Issue {
     @JsonProperty("downvotes")
     private Integer downvotes;
     @JsonProperty("html_url")
+    @JsonIgnore
+    private String htmlUrl;
+    @JsonProperty("web_url")
     private String webUrl;
     @JsonProperty("comment")
     private List<Comment> comments;
@@ -178,10 +185,22 @@ public class Issue {
     public User getAuthor() {
         return author;
     }
-    @JsonProperty("user")
+    @JsonProperty("author")
     public void setAuthor(User author) {
         this.author = author;
     }
+
+    @JsonProperty("user")
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    @JsonProperty("user")
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @JsonProperty("assignee")
     public User getAssignee() {
         return assignee;
@@ -191,11 +210,25 @@ public class Issue {
         this.assignee = assignee;
     }
 
+
+
+
     @JsonProperty("html_url")
+    @JsonIgnore
+    public String getHtmlUrl() {
+        return htmlUrl;
+    }
+
+    @JsonProperty("html_url")
+    public void setHtmlUrl(String webUrl) {
+        this.htmlUrl = webUrl;
+    }
+
+    @JsonProperty("web_url")
     public String getWebUrl() {
         return webUrl;
     }
-    @JsonProperty("html_url")
+    @JsonProperty("web_url")
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }
@@ -212,7 +245,6 @@ public class Issue {
     public List<String> getLabels() {
         return labels.stream().map(Label::getName).collect(Collectors.toList());
     }
-
 
     @JsonProperty("reactions")
     @JsonIgnore

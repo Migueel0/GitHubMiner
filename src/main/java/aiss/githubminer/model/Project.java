@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -25,9 +26,14 @@ public class Project {
     @JsonProperty("name")
     @NotEmpty(message = "The name of the project cannot be empty")
     public String name;
-    @JsonProperty("html_url")
+    @JsonProperty("web_url")
     @NotEmpty(message = "The web url of the project cannot be empty")
     private String webUrl;
+
+    @JsonProperty("html_url")
+    @JsonIgnore
+    @NotEmpty(message = "The web url of the project cannot be empty")
+    private String htmlUrl;
 
     @JsonProperty("commits")
     private List<Commit> commits;
@@ -58,6 +64,17 @@ public class Project {
     public void setName(String name) {
         this.name = name;
     }
+    @JsonProperty("html_url")
+    @JsonIgnore
+    public String getHtmlUrl() {
+        return htmlUrl;
+    }
+
+    @JsonProperty("html_url")
+    public void setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+    }
+
 
     @JsonProperty("web_url")
     public String getWebUrl() {
@@ -88,6 +105,8 @@ public class Project {
     public void setIssues(List<Issue> issuesList) {
         this.issues = issuesList;
     }
+
+
 
 
     @Override
