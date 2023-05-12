@@ -22,7 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class GitHubServiceTest {
     @Autowired
-    GitHubService gitHubService;
+    CommitService commitService;
+    @Autowired
+    IssueService issueService;
+    @Autowired
+    ProjectService projectService;
+    @Autowired
+    CommentService commentService;
     @Autowired
     RestTemplate restTemplate;
     final String baseUri = "https://api.github.com/";
@@ -49,7 +55,7 @@ class GitHubServiceTest {
 
         //Checking response fields
         assertTrue(response.hasBody());
-        Project project = gitHubService.getProjectByOwnerAndName(owner,repo);
+        Project project = projectService.getProjectByOwnerAndName(owner,repo);
         assertNotNull(project.getId(), "Id cannot be null");
         assertNotNull(project.getName(), "Name cannot be null");
         assertEquals(name,project.getName(),"Provided name must be equal the project name");
@@ -70,7 +76,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer days = 7;
         Integer pages = 30;
-        List<Commit> commits =  gitHubService.sinceCommits(owner,repo,days,pages);
+        List<Commit> commits =  commitService.sinceCommits(owner,repo,days,pages);
 
         String uri = baseUri + "/repos/" + owner + "/" + repo + "/commits";
 
@@ -112,7 +118,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer days = 20;
         Integer pages = 1;
-        List<Issue> issues =  gitHubService.sinceIssues(owner,repo,days,pages);
+        List<Issue> issues =  issueService.sinceIssues(owner,repo,days,pages);
 
         String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues";
 
@@ -156,7 +162,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         String name = "client-encryption-java";
 
-        Project data =  gitHubService.allData(owner,repo,5,20,1);
+        Project data =  projectService.allData(owner,repo,5,20,1);
         assertNotNull(data.getId(), "Id cannot be null");
         assertNotNull(data.getName(), "Name cannot be null");
         assertEquals(name,data.getName(),"Provided name must be equal the project name");
@@ -225,7 +231,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer days = 7;
         Integer pages = 30;
-        List<Commit> commits =  gitHubService.sinceCommits(owner,repo,days,pages);
+        List<Commit> commits =  commitService.sinceCommits(owner,repo,days,pages);
         System.out.println(commits);
 
 
@@ -238,7 +244,7 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer days = 20;
         Integer pages = 1;
-        List<Issue> issues = gitHubService.sinceIssues(owner,repo,days,pages);
+        List<Issue> issues = issueService.sinceIssues(owner,repo,days,pages);
         System.out.println(issues);
 
 
@@ -252,7 +258,7 @@ class GitHubServiceTest {
         Integer sinceCommits = 20;
         Integer sinceIssues = 50;
         Integer pages = 1;
-        Project project = gitHubService.allData(owner,repo,sinceCommits,sinceIssues,pages);
+        Project project = projectService.allData(owner,repo,sinceCommits,sinceIssues,pages);
         System.out.println(project);
 
 

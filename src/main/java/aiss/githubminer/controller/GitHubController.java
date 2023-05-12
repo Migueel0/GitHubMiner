@@ -2,7 +2,7 @@ package aiss.githubminer.controller;
 
 
 import aiss.githubminer.model.Project;
-import aiss.githubminer.service.GitHubService;
+import aiss.githubminer.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -13,11 +13,11 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("githubminer")
 public class GitHubController {
+
+    @Autowired
+    ProjectService service;
     @Autowired
     RestTemplate restTemplate;
-    @Autowired
-    GitHubService service;
-
     final String gitMinerUri = "http://localhost:8080/gitminer/v1/projects";
 
     @GetMapping("/{owner}/{repo}")
@@ -33,8 +33,7 @@ public class GitHubController {
         Project project= service.allData(owner,repo, sinceCommits, sinceIssues, maxPages);
         HttpEntity<Project> request = new HttpEntity<>(project);
         ResponseEntity<Project> response = restTemplate.exchange(gitMinerUri, HttpMethod.POST,request, Project.class);
-        Project newProject = response.getBody();
-        return newProject;
+        return response.getBody();
     }
 
 

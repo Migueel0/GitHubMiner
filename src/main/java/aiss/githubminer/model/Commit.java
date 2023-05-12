@@ -28,7 +28,6 @@ public class Commit {
     public CommitProperty commit;
     @JsonProperty("id")
     private String id;
-
     @JsonIgnore
     private String sha;
     @JsonProperty("title")

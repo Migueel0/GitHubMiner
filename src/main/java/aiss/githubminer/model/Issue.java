@@ -1,9 +1,6 @@
 package aiss.githubminer.model;
 
-import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Generated;
@@ -52,7 +49,6 @@ public class Issue {
     private String updatedAt;
     @JsonProperty("closed_at")
     private String closedAt;
-
     @JsonProperty("user")
     private User author;
     @JsonProperty("assignee")
@@ -65,7 +61,6 @@ public class Issue {
     private String webUrl;
     @JsonProperty("comment")
     private List<Comment> comments;
-
     @JsonProperty("labels")
     private List<Label> labels;
     @JsonIgnore
