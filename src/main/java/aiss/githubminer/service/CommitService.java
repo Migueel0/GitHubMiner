@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,41 +24,27 @@ public class CommitService {
 
     @Autowired
     RestTemplate restTemplate;
-    final String baseUri = "https://api.github.com/";
+    final String baseUri = "https://api.github.com";
     public List<Commit> sinceCommits(String owner, String repo, Integer days, Integer pages){
-        String uri = baseUri + "/repos/" + owner + "/" + repo + "/commits";
+        LocalDate date = LocalDate.now().minusDays(days);
+        String uri = baseUri + "/repos/" + owner + "/" + repo + "/commits?page=1&since=" + date;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Commit[]> request = new HttpEntity<>(null, headers);
         ResponseEntity<Commit[]> response =  restTemplate.exchange(uri, HttpMethod.GET, request, Commit[].class);
-
-
-        //TODO: DONT TAKE FIRST PAGE
-        //FIRST PAGE
         List<Commit> commits = new ArrayList<>();
-
-        commits.addAll(Arrays.stream(response.getBody()).toList());
-        mapCommitValues(commits);
-        commits = commits.stream()
-                .filter(x -> RESTUtil.StringToLocalDateTime(x.getCommittedDate())
-                        .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
         int page = 1;
-
-        //ADDING REMAINING PAGES
-        while (page <= pages && RESTUtil.getNextPageUrl(response.getHeaders())!= null){
-            String url =  RESTUtil.getNextPageUrl(response.getHeaders());
-            response =  restTemplate.exchange(url,HttpMethod.GET,request,Commit[].class);
+        while (page <= pages && uri!= null){
+            System.out.println(uri);
             List<Commit> commitPage = Arrays.stream(response.getBody()).toList();
+            response =  restTemplate.exchange(uri,HttpMethod.GET,request,Commit[].class);
             mapCommitValues(commitPage);
-            commitPage = commitPage.stream()
-                    .filter(x -> RESTUtil.StringToLocalDateTime(x.getCommittedDate())
-                            .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
             commits.addAll(commitPage);
+            uri =  RESTUtil.getNextPageUrl(response.getHeaders());
             page++;
         }
         return commits;
     }
-
     public void mapCommitValues(List<Commit> commits){
         for(Commit commit: commits){
 

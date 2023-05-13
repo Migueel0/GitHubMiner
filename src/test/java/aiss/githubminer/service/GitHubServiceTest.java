@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -74,11 +76,12 @@ class GitHubServiceTest {
     void sinceCommitsTest(){
         String owner = "Mastercard";
         String repo = "client-encryption-java";
-        Integer days = 7;
+        Integer days = 15;
         Integer pages = 30;
         List<Commit> commits =  commitService.sinceCommits(owner,repo,days,pages);
 
-        String uri = baseUri + "/repos/" + owner + "/" + repo + "/commits";
+        LocalDate date = LocalDate.now().minusDays(days);
+        String uri = baseUri + "/repos/" + owner + "/" + repo + "/commits?since=" + date;
 
         //Consuming API in order to get the status code
         HttpHeaders headers = new HttpHeaders();
@@ -89,7 +92,6 @@ class GitHubServiceTest {
 
         //Checking the status code
         assertEquals(HttpStatus.OK, status,"Status code must be OK");
-
 
         //Checking response fields
         for(Commit commit: commits){
@@ -116,8 +118,8 @@ class GitHubServiceTest {
     void sinceIssuesTest(){
         String owner = "Mastercard";
         String repo = "client-encryption-java";
-        Integer days = 20;
-        Integer pages = 1;
+        Integer days = 0;
+        Integer pages = 10;
         List<Issue> issues =  issueService.sinceIssues(owner,repo,days,pages);
 
         String uri = baseUri + "/repos/" + owner + "/" + repo + "/issues";
@@ -193,8 +195,6 @@ class GitHubServiceTest {
             assertNotEquals(HttpStatus.UNAUTHORIZED, errorStatus,"Status cannot be unauthorized");
         }
 
-
-
         ///Checking response with no token authorization
         HttpHeaders headersNoToken  = new HttpHeaders();
         HttpEntity<String[]> requestNoToken = new HttpEntity<>(null,headersNoToken);
@@ -206,7 +206,6 @@ class GitHubServiceTest {
             HttpStatus errorStatus = e.getStatusCode();
             assertEquals(HttpStatus.UNAUTHORIZED, errorStatus, "Status code must be unauthorized");
         }
-
 
         //Checking response with not valid token
         HttpHeaders headersNotValidToken  = new HttpHeaders();
@@ -229,12 +228,10 @@ class GitHubServiceTest {
     void commitData(){
         String owner = "Mastercard";
         String repo = "client-encryption-java";
-        Integer days = 7;
+        Integer days = 15;
         Integer pages = 30;
         List<Commit> commits =  commitService.sinceCommits(owner,repo,days,pages);
         System.out.println(commits);
-
-
     }
 
     @Test
@@ -243,11 +240,9 @@ class GitHubServiceTest {
         String owner = "Mastercard";
         String repo = "client-encryption-java";
         Integer days = 20;
-        Integer pages = 1;
+        Integer pages = 3;
         List<Issue> issues = issueService.sinceIssues(owner,repo,days,pages);
         System.out.println(issues);
-
-
     }
 
     @Test
@@ -257,10 +252,8 @@ class GitHubServiceTest {
         String repo = "client-encryption-java";
         Integer sinceCommits = 20;
         Integer sinceIssues = 50;
-        Integer pages = 1;
+        Integer pages = 3;
         Project project = projectService.allData(owner,repo,sinceCommits,sinceIssues,pages);
         System.out.println(project);
-
-
     }
 }
