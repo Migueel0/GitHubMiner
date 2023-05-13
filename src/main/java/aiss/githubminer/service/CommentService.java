@@ -1,6 +1,7 @@
 package aiss.githubminer.service;
 
 import aiss.githubminer.model.Comment;
+import aiss.githubminer.model.User;
 import aiss.githubminer.utils.RESTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -27,8 +28,29 @@ public class CommentService {
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<String[]> request = new HttpEntity<>(null,headers);
         ResponseEntity<Comment[]> response = restTemplate.exchange(uri, HttpMethod.GET,request,Comment[].class);
-        return Arrays.stream(response.getBody()).toList();
+        List<Comment> comments = Arrays.stream(response.getBody()).toList();
+        mapAuthorValues(comments);
+        return comments;
     }
+
+    public void mapAuthorValues(List<Comment> comments){
+        for(Comment comment: comments){
+            if(comment !=null) {
+                User commentAuthor = comment.getUser();
+                String commentAuthorUserName = commentAuthor.getLogin();
+                String commentAuthorName = commentAuthor.getLogin();
+                String commentAuthorWebUrl = commentAuthor.getHtmlUrl();
+
+                comment.setAuthor(commentAuthor);
+                commentAuthor.setUsername(commentAuthorUserName);
+                commentAuthor.setName(commentAuthorName);
+                commentAuthor.setWebUrl(commentAuthorWebUrl);
+            }
+        }
+
+    }
+
+
 
 
 

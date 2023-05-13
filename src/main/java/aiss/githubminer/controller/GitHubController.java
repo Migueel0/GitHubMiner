@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("githubminer")
+@RequestMapping("/githubminer")
 public class GitHubController {
 
     @Autowired
@@ -26,7 +26,6 @@ public class GitHubController {
         return service.allData(owner,repo, sinceCommits, sinceIssues, maxPages);
     }
 
-
     @PostMapping("/{owner}/{repo}")
     public Project sendData(@PathVariable String owner,@PathVariable String repo, @RequestParam(defaultValue = "5") Integer sinceCommits,
                             @RequestParam(defaultValue = "20") Integer sinceIssues, @RequestParam(defaultValue = "2") Integer maxPages){
@@ -35,6 +34,5 @@ public class GitHubController {
         ResponseEntity<Project> response = restTemplate.exchange(gitMinerUri, HttpMethod.POST,request, Project.class);
         return response.getBody();
     }
-
 
 }

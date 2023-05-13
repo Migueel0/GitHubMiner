@@ -2,6 +2,8 @@ package aiss.githubminer.model;
 
 
 import javax.annotation.Generated;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,6 +29,9 @@ public class Comment {
     private String updatedAt;
     @JsonProperty("author")
     private User author;
+    @JsonProperty("user")
+
+    private User user;
 
     @JsonProperty("id")
     public String getId() {
@@ -68,13 +73,23 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    @JsonProperty("user")
+    @JsonProperty("author")
     public User getAuthor() {
         return author;
     }
-    @JsonProperty("user")
+    @JsonProperty("author")
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @JsonProperty("user")
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+    @JsonProperty("user")
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

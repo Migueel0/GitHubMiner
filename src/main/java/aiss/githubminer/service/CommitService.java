@@ -75,7 +75,11 @@ public class CommitService {
             String webUrl = commit.getCommit().getUrl();
 
             commit.setId(id);
-            commit.setTitle(title);
+            if(title.length() < 20) {
+                commit.setTitle(title);
+            }else {
+                commit.setTitle(title.substring(0,20));
+            }
             commit.setMessage(title);
             commit.setAuthorName(authorName);
             commit.setAuthorEmail(authorEmail);

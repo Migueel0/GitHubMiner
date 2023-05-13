@@ -1,6 +1,9 @@
 package aiss.githubminer.service;
 
+import aiss.githubminer.model.Comment;
+import aiss.githubminer.model.Commit;
 import aiss.githubminer.model.Issue;
+import aiss.githubminer.model.IssueData.IssueData;
 import aiss.githubminer.model.User;
 import aiss.githubminer.utils.RESTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class IssueService {
 
     @Autowired
     CommentService commentService;
+
+
+    IssueData data = new IssueData();
     @Autowired
     RestTemplate restTemplate;
     final String baseUri = "https://api.github.com/";
@@ -32,8 +38,8 @@ public class IssueService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + RESTUtil.tokenReader("src/test/java/aiss/githubminer/token.txt"));
         HttpEntity<Issue[]> request = new HttpEntity<>(null, headers);
-        ResponseEntity<Issue[]> response = restTemplate.exchange(uri, HttpMethod.GET, request, Issue[].class);
-        List<Issue> issues = new ArrayList<>();
+        ResponseEntity<IssueData[]> response = restTemplate.exchange(uri, HttpMethod.GET, request, IssueData[].class);
+        List<IssueData> issues = new ArrayList<>();
 
         //FIRST PAGE
         int page = 1;
@@ -44,38 +50,46 @@ public class IssueService {
         //ADDING REMAINING PAGES
         while (page <= pages && RESTUtil.getNextPageUrl(response.getHeaders()) != null) {
             String url = RESTUtil.getNextPageUrl(response.getHeaders());
-            response = restTemplate.exchange(url, HttpMethod.GET, request, Issue[].class);
-            List<Issue> issuePage = Arrays.stream(response.getBody()).filter(x -> RESTUtil
+            response = restTemplate.exchange(url, HttpMethod.GET, request, IssueData[].class);
+            List<IssueData> issuePage = Arrays.stream(response.getBody()).filter(x -> RESTUtil
                     .StringToLocalDateTime(x.getUpdatedAt())
                     .isAfter(LocalDateTime.now().minusDays(days))).collect(Collectors.toList());
             issues.addAll(issuePage);
             page++;
         }
-        mapIssuesValues(issues);
-        issues.forEach(x -> x.setComments(commentService.getNotes(owner, repo, x.getRefId())));
-        return issues;
+
+        List<Issue> data = mapIssuesValues(issues);
+        data.forEach(x -> x.setComments(commentService.getNotes(owner, repo, x.getRefId())));
+        mapAuthorValues(data);
+        return data;
     }
 
-    public void mapIssuesValues(List<Issue> issues) {
-        List<User> users = new ArrayList<>();
-        for (Issue issue : issues) {
+    public List<Issue> mapIssuesValues(List<IssueData> issues) {
+        List<Issue> data= new ArrayList<>();
+        List<String> labels = new ArrayList<>();
 
-            String refId = issue.getNumber();
-            Integer upvotes = issue.getReactions().getPlus1();
-            Integer downvotes = issue.getReactions().getMinous1();
-            String webUrl = issue.getHtmlUrl();
-            User author = issue.getUser();
-            String userWebUrl = issue.getUser().getHtmlUrl();
-
-            issue.setAuthor(author);
-            issue.setRefId(refId);
-            issue.setUpvotes(upvotes);
-            issue.setDownvotes(downvotes);
-            issue.setWebUrl(webUrl);
-
-            issue.getAuthor().setWebUrl(userWebUrl);
+        for (IssueData issue : issues) {
+            Issue issue1 = new Issue(issue.getId(), issue.getNumber(),issue.getTitle(),issue.getBody(),issue.getState(),issue.getCreatedAt(),issue.getUpdatedAt(),issue.getClosedAt(),
+            labels,issue.getUser(),issue.getAssignee(),issue.getReactions().getPlus1(),issue.getReactions().getMinous1(),issue.getHtmlUrl());
+            issue1.setLabels(issue.getLabels());
+            data.add(issue1);
         }
+        return data;
+    }
 
+    public void mapAuthorValues(List<Issue> issues){
+        for(Issue issue: issues){
+            User commentAuthor = issue.getAuthor();
+            String commentAuthorUserName = commentAuthor.getLogin();
+            String commentAuthorName = commentAuthor.getLogin();
+            String commentAuthorWebUrl = commentAuthor.getHtmlUrl();
+
+            issue.setAuthor(commentAuthor);
+            commentAuthor.setUsername(commentAuthorUserName);
+            commentAuthor.setName(commentAuthorName);
+            commentAuthor.setWebUrl(commentAuthorWebUrl);
+
+        }
 
     }
 }
