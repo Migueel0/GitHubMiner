@@ -1,10 +1,7 @@
 package aiss.githubminer.service;
 
-import aiss.githubminer.model.Comment;
-import aiss.githubminer.model.Commit;
-import aiss.githubminer.model.Issue;
+import aiss.githubminer.model.*;
 import aiss.githubminer.model.IssueData.IssueData;
-import aiss.githubminer.model.User;
 import aiss.githubminer.utils.RESTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -50,39 +47,9 @@ public class IssueService {
             uri = RESTUtil.getNextPageUrl(response.getHeaders());
             page++;
         }
-        List<Issue> data = mapIssuesValues(issues);
+        List<Issue> data = FactoryModel.formatIssues(issues);
         data.forEach(x -> x.setComments(commentService.getNotes(owner, repo, x.getRefId())));
-        mapAuthorValues(data);
         return data;
     }
 
-    public List<Issue> mapIssuesValues(List<IssueData> issues) {
-        List<Issue> data= new ArrayList<>();
-        List<String> labels = new ArrayList<>();
-
-        for (IssueData issue : issues) {
-            Issue issue1 = new Issue(issue.getId(), issue.getNumber(),issue.getTitle(),issue.getBody(),issue.getState(),issue.getCreatedAt(),
-                    issue.getUpdatedAt(),issue.getClosedAt(), labels,issue.getUser(),issue.getAssignee(),issue.getReactions().getPlus1(),
-                    issue.getReactions().getMinous1(),issue.getHtmlUrl());
-                     issue1.setLabels(issue.getLabels());
-            data.add(issue1);
-        }
-        return data;
-    }
-
-    public void mapAuthorValues(List<Issue> issues){
-        for(Issue issue: issues){
-            User commentAuthor = issue.getAuthor();
-            String commentAuthorUserName = commentAuthor.getLogin();
-            String commentAuthorName = commentAuthor.getLogin();
-            String commentAuthorWebUrl = commentAuthor.getHtmlUrl();
-
-            issue.setAuthor(commentAuthor);
-            commentAuthor.setUsername(commentAuthorUserName);
-            commentAuthor.setName(commentAuthorName);
-            commentAuthor.setWebUrl(commentAuthorWebUrl);
-
-        }
-
-    }
 }

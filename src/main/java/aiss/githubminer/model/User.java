@@ -22,18 +22,20 @@ public class User {
     private String id;
     @JsonProperty("username")
     private String username;
-    @JsonProperty("login")
-    @JsonIgnore
-    private String login;
     @JsonProperty("name")
     private String name;
     @JsonProperty("avatar_url")
     private String avatarUrl;
-    @JsonProperty("html_url")
-    @JsonIgnore
-    private String htmlUrl;
     @JsonProperty("web_url")
     private String webUrl;
+
+    public User(String id, String username, String name, String avatarUrl, String webUrl) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.avatarUrl = avatarUrl;
+        this.webUrl = webUrl;
+    }
 
     @JsonProperty("id")
     public String getId() {
@@ -55,17 +57,6 @@ public class User {
         this.username = username;
     }
 
-    @JsonProperty("login")
-    @JsonIgnore
-    public String getLogin() {
-        return login;
-    }
-
-    @JsonProperty("login")
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -84,17 +75,6 @@ public class User {
     @JsonProperty("avatar_url")
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
-    }
-
-    @JsonProperty("html_url")
-    @JsonIgnore
-    public String getHtmlUrl() {
-        return htmlUrl;
-    }
-
-    @JsonProperty("html_url")
-    public void setHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
     }
 
     @JsonProperty("web_url")

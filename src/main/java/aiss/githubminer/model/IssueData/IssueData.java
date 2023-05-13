@@ -2,6 +2,7 @@ package aiss.githubminer.model.IssueData;
 
 import aiss.githubminer.model.Comment;
 import aiss.githubminer.model.User;
+import aiss.githubminer.model.UserData.UserData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,24 +11,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.ALWAYS)
-@JsonPropertyOrder({
-        "id",
-        "ref_id",
-        "title",
-        "description",
-        "state",
-        "created_at",
-        "updated_at",
-        "closed_at",
-        "labels",
-        "author",
-        "assignee",
-        "upvotes",
-        "downvotes",
-        "web_url",
-        "comments"
-
-})
 public class IssueData {
     @JsonProperty("id")
     private String id;
@@ -48,7 +31,7 @@ public class IssueData {
     @JsonProperty("closed_at")
     private String closedAt;
     @JsonProperty("user")
-    private User user;
+    private UserData user;
     @JsonProperty("assignee")
     private User assignee;
     @JsonProperty("html_url")
@@ -129,11 +112,11 @@ public class IssueData {
         this.closedAt = closedAt;
     }
     @JsonProperty("user")
-    public User getUser() {
+    public UserData getUser() {
         return user;
     }
     @JsonProperty("user")
-    public void setUser(User user) {
+    public void setUser(UserData user) {
         this.user = user;
     }
     @JsonProperty("assignee")
@@ -176,50 +159,4 @@ public class IssueData {
         this.reactions = reactions;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id");
-        sb.append('=');
-        sb.append(((this.id == null)?"<null>":this.id));
-        sb.append(",\n");
-        sb.append("title");
-        sb.append('=');
-        //sb.append(((this.title == null)?"<null>":this.title));
-        sb.append(",\n");
-        sb.append("description");
-        sb.append('=');
-        //sb.append(((this.description == null)?"<null>":this.description));
-        sb.append(",\n");
-        sb.append("state");
-        sb.append('=');
-        sb.append(((this.state == null)?"<null>":this.state));
-        sb.append(",\n");
-        sb.append("createdAt");
-        sb.append('=');
-        sb.append(((this.createdAt == null)?"<null>":this.createdAt));
-        sb.append(",\n");
-        sb.append("updatedAt");
-        sb.append('=');
-        sb.append(((this.updatedAt == null)?"<null>":this.updatedAt));
-        sb.append(",\n");
-        sb.append("closedAt");
-        sb.append('=');
-        sb.append(((this.closedAt == null)?"<null>":this.closedAt));
-        sb.append(",\n");
-        sb.append("labels");
-        sb.append('=');
-        sb.append(((this.labels == null)?"<null>":this.labels));
-        sb.append(",\n");
-        sb.append("assignee");
-        sb.append('=');
-        sb.append(((this.assignee == null)?"<null>":this.assignee));
-        sb.append(",\n");
-        if (sb.charAt((sb.length()- 1)) == ',') {
-            sb.setCharAt((sb.length()- 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
-    }
 }

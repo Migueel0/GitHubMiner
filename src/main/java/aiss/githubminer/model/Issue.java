@@ -172,8 +172,8 @@ public class Issue {
     public List<String> getLabels() {
         return labels;
     }
-    public void setLabels(List<Label> labels) {
-        this.labels = labels.stream().map(x->x.getName()).toList();
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
     @Override
     public String toString() {

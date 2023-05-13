@@ -29,12 +29,6 @@ public class Project {
     @JsonProperty("web_url")
     @NotEmpty(message = "The web url of the project cannot be empty")
     private String webUrl;
-
-    @JsonProperty("html_url")
-    @JsonIgnore
-    @NotEmpty(message = "The web url of the project cannot be empty")
-    private String htmlUrl;
-
     @JsonProperty("commits")
     private List<Commit> commits;
     @JsonProperty("issues")
@@ -64,17 +58,6 @@ public class Project {
     public void setName(String name) {
         this.name = name;
     }
-    @JsonProperty("html_url")
-    @JsonIgnore
-    public String getHtmlUrl() {
-        return htmlUrl;
-    }
-
-    @JsonProperty("html_url")
-    public void setHtmlUrl(String htmlUrl) {
-        this.htmlUrl = htmlUrl;
-    }
-
 
     @JsonProperty("web_url")
     public String getWebUrl() {
@@ -106,8 +89,13 @@ public class Project {
         this.issues = issuesList;
     }
 
-
-
+    public Project(String id, String name, String webUrl, List<Commit> commits, List<Issue> issues) {
+        this.id = id;
+        this.name = name;
+        this.webUrl = webUrl;
+        this.commits = commits;
+        this.issues = issues;
+    }
 
     @Override
     public String toString() {

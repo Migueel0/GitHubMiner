@@ -29,9 +29,15 @@ public class Comment {
     private String updatedAt;
     @JsonProperty("author")
     private User author;
-    @JsonProperty("user")
 
-    private User user;
+    public Comment(String id, String body, String createdAt, String updatedAt,User author){
+        this.id = id;
+        this.body = body;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.author = author;
+    }
+
 
     @JsonProperty("id")
     public String getId() {
@@ -82,15 +88,6 @@ public class Comment {
         this.author = author;
     }
 
-    @JsonProperty("user")
-    @JsonIgnore
-    public User getUser() {
-        return user;
-    }
-    @JsonProperty("user")
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public String toString() {

@@ -6,6 +6,7 @@ import aiss.githubminer.model.Comment;
 import aiss.githubminer.model.Commit;
 import aiss.githubminer.model.Issue;
 import aiss.githubminer.model.Project;
+import aiss.githubminer.model.ProjectData.ProjectData;
 import aiss.githubminer.utils.RESTUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ class GitHubServiceTest {
 
     @Test
     @DisplayName("Testing get project by id")
-    void getProjectByIdTest(){
+    void getProjectByOwnerAndRepoTest(){
 
         //Define some parameters
         String owner = "Mastercard";
@@ -57,14 +58,10 @@ class GitHubServiceTest {
 
         //Checking response fields
         assertTrue(response.hasBody());
-        Project project = projectService.getProjectByOwnerAndName(owner,repo);
+        ProjectData project = projectService.getProjectByOwnerAndName(owner,repo);
         assertNotNull(project.getId(), "Id cannot be null");
         assertNotNull(project.getName(), "Name cannot be null");
         assertEquals(name,project.getName(),"Provided name must be equal the project name");
-
-        //Issues and commits must be empty because this method doesn't set both arrays
-        assertTrue(project.getCommits().isEmpty());
-        assertTrue(project.getIssues().isEmpty());
 
         System.out.println("Test passed");
         System.out.println(project);
